@@ -32,6 +32,8 @@ import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.
 import { TwentyORMModule } from 'src/engine/twenty-orm/twenty-orm.module';
 import { WorkspaceCacheStorageModule } from 'src/engine/workspace-cache-storage/workspace-cache-storage.module';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
+import { PersonalWorkspaceController } from 'src/engine/core-modules/personal-workspace/personal-workspace.controller';
+import { PersonalWorkspaceModule } from 'src/engine/core-modules/personal-workspace/personal-workspace.module';
 
 const restApiCoreResolvers = [
   RestApiCreateOneHandler,
@@ -67,8 +69,9 @@ const restApiCoreResolvers = [
     WorkspaceDomainsModule,
     WorkspaceCacheModule,
     SecureHttpClientModule,
+    PersonalWorkspaceModule,
   ],
-  controllers: [RestApiCoreController],
+  controllers: [RestApiCoreController, PersonalWorkspaceController],
   providers: [
     RestApiService,
     RestApiCoreService,

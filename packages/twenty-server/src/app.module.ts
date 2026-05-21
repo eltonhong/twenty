@@ -36,6 +36,8 @@ import { ModulesModule } from 'src/modules/modules.module';
 import { ClickHouseModule } from './database/clickHouse/clickHouse.module';
 import { CoreEngineModule } from './engine/core-modules/core-engine.module';
 import { I18nModule } from './engine/core-modules/i18n/i18n.module';
+import { PersonalWorkspaceController } from './engine/core-modules/personal-workspace/personal-workspace.controller';
+import { PingController } from './ping.controller';
 
 // TODO: Remove this middleware when all the rest endpoints are migrated to TwentyORM
 const MIGRATED_REST_METHODS = [

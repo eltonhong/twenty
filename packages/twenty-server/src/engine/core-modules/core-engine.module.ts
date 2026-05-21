@@ -8,6 +8,7 @@ import { ApplicationLogsModule } from 'src/engine/core-modules/application-logs/
 import { applicationLogsModuleFactory } from 'src/engine/core-modules/application-logs/application-logs.module-factory';
 import { AdminPanelModule } from 'src/engine/core-modules/admin-panel/admin-panel.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
+import { PersonalWorkspaceModule } from 'src/engine/core-modules/personal-workspace/personal-workspace.module';
 import { AppTokenModule } from 'src/engine/core-modules/app-token/app-token.module';
 import { ApplicationDevelopmentModule } from 'src/engine/core-modules/application/application-development/application-development.module';
 import { ApplicationInstallModule } from 'src/engine/core-modules/application/application-install/application-install.module';
@@ -166,6 +167,7 @@ import { FileModule } from './file/file.module';
     EventLogsModule,
     PreInstalledAppsModule,
     AppBillingModule,
+    PersonalWorkspaceModule,
   ],
   providers: [
     {
