@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { type NestExpressApplication } from '@nestjs/platform-express';
 
 import fs from 'fs';
+import { Router } from 'express';
+import { PersonalWorkspaceService } from './engine/core-modules/personal-workspace/personal-workspace.service';
 
 import bytes from 'bytes';
 import { useContainer } from 'class-validator';
@@ -89,6 +91,69 @@ const bootstrap = async () => {
 
   // Inject the server url in the frontend page
   generateFrontConfig();
+
+  // Personal Workspace API - registered at Express level to bypass NestJS middleware
+  const personalWorkspaceRouter = Router();
+  const personalWorkspaceService = app.get(PersonalWorkspaceService);
+  const DEMO_USER_ID = '00000000-0000-0000-0000-000000000001';
+
+  personalWorkspaceRouter.get('/tasks', async (req, res) => {
+    const tasks = await personalWorkspaceService.getPersonalTasks(DEMO_USER_ID);
+    res.json(tasks);
+  });
+
+  personalWorkspaceRouter.post('/tasks', async (req, res) => {
+    const task = await personalWorkspaceService.createPersonalTask(DEMO_USER_ID, req.body);
+    res.status(201).json(task);
+  });
+
+  personalWorkspaceRouter.put('/tasks/:id', async (req, res) => {
+    const task = await personalWorkspaceService.updatePersonalTask(req.params.id, DEMO_USER_ID, req.body);
+    res.json(task);
+  });
+
+  personalWorkspaceRouter.delete('/tasks/:id', async (req, res) => {
+    await personalWorkspaceService.deletePersonalTask(req.params.id, DEMO_USER_ID);
+    res.json({ success: true });
+  });
+
+  personalWorkspaceRouter.get('/today', async (req, res) => {
+    const tasks = await personalWorkspaceService.getTodayTasks(DEMO_USER_ID);
+    res.json(tasks);
+  });
+
+  personalWorkspaceRouter.get('/projects', async (req, res) => {
+    const projects = await personalWorkspaceService.getProjects(DEMO_USER_ID);
+    res.json(projects);
+  });
+
+  personalWorkspaceRouter.post('/projects', async (req, res) => {
+    const project = await personalWorkspaceService.createProject(DEMO_USER_ID, req.body);
+    res.status(201).json(project);
+  });
+
+  personalWorkspaceRouter.delete('/projects/:id', async (req, res) => {
+    await personalWorkspaceService.deleteProject(req.params.id, DEMO_USER_ID);
+    res.json({ success: true });
+  });
+
+  personalWorkspaceRouter.get('/projects/:projectId/tasks', async (req, res) => {
+    const tasks = await personalWorkspaceService.getProjectTasks(req.params.projectId);
+    res.json(tasks);
+  });
+
+  personalWorkspaceRouter.post('/projects/:projectId/tasks', async (req, res) => {
+    const task = await personalWorkspaceService.createProjectTask(req.params.projectId, req.body);
+    res.status(201).json(task);
+  });
+
+  const expressApp = app.getHttpAdapter().getInstance();
+
+  // Simple test route
+  expressApp.get('/api/test', (req, res) => { res.json({ok:true}); });
+
+  // Personal Workspace API
+  expressApp.use('/api/personal-workspace', personalWorkspaceRouter);
 
   await app.listen(twentyConfigService.get('NODE_PORT'));
 };

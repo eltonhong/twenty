@@ -37,6 +37,7 @@ import { ClickHouseModule } from './database/clickHouse/clickHouse.module';
 import { CoreEngineModule } from './engine/core-modules/core-engine.module';
 import { I18nModule } from './engine/core-modules/i18n/i18n.module';
 import { PersonalWorkspaceController } from './engine/core-modules/personal-workspace/personal-workspace.controller';
+import { PersonalWorkspaceMiddleware } from './engine/core-modules/personal-workspace/personal-workspace.middleware';
 import { PingController } from './ping.controller';
 
 // TODO: Remove this middleware when all the rest endpoints are migrated to TwentyORM
@@ -138,6 +139,10 @@ export class AppModule {
     consumer
       .apply(McpMethodGuardMiddleware)
       .forRoutes({ path: 'mcp', method: RequestMethod.ALL });
+
+    consumer
+      .apply(PersonalWorkspaceMiddleware)
+      .forRoutes({ path: 'api/personal-workspace/*path', method: RequestMethod.ALL });
 
     for (const method of MIGRATED_REST_METHODS) {
       consumer

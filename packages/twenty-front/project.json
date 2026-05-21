@@ -60,7 +60,7 @@
       "cache": true,
       "options": {
         "cwd": "{projectRoot}",
-        "command": "cp .env.example .env"
+        "command": "node -e \"require('fs').copyFileSync('.env.example','.env')\""
       }
     },
     "typecheck": {},
